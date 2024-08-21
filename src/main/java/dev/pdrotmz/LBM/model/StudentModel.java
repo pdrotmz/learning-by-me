@@ -20,5 +20,6 @@ public class StudentModel {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID idStudent;
     private String studentUsername;
+    private String studentEmail;
     private String studentPassword;
 }
