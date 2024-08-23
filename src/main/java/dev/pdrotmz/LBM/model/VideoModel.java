@@ -21,5 +21,5 @@ public class VideoModel {
     private UUID IdVideo;
     private String title;
     private String description;
-    private String video;
+    private String filePath;
 }
