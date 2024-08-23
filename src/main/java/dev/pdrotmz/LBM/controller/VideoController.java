@@ -7,7 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,11 +24,34 @@ public class VideoController {
     @Autowired
     private VideoService videoService;
 
+    private static String UPLOADED_FOLDER = "C:\\Users\\usuario\\Videos";
+
     @PostMapping("upload-video")
-    public ResponseEntity<VideoModel> registerVideo(@RequestBody VideoModel video) {
-        VideoModel videoModel = videoService.registerVideo(video);
-        return ResponseEntity.status(HttpStatus.CREATED).body(videoModel);
+    public ResponseEntity<VideoModel> registerVideo(@RequestParam("video") MultipartFile videoFile,
+                                                    @RequestParam("title") String title,
+                                                    @RequestParam("description") String description) {
+        if(videoFile.isEmpty()) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        try {
+            byte[] bytes = videoFile.getBytes();
+            Path path = Paths.get(UPLOADED_FOLDER + videoFile.getOriginalFilename());
+            Files.write(path, bytes);
+
+            VideoModel video = new VideoModel();
+            video.setTitle(title);
+            video.setDescription(description);
+            video.setFilePath(path.toString());
+            VideoModel savedVideo = videoService.registerVideo(video);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedVideo);
+        } catch(IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+
 
     @GetMapping
     public ResponseEntity<List<VideoModel>> getAllVideos(){
