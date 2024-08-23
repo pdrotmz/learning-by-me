@@ -32,7 +32,7 @@ public class VideoService {
         return videoRepository.findById(idVideo).map(VideoModel ->{
             VideoModel.setTitle(updateVideo.getTitle());
             VideoModel.setDescription(updateVideo.getDescription());
-            VideoModel.setVideo(updateVideo.getVideo());
+            VideoModel.setFilePath(updateVideo.getFilePath());
             return videoRepository.save(VideoModel);
         }).orElseThrow(() -> new EntityNotFoundException("Video was not found"));
     }
