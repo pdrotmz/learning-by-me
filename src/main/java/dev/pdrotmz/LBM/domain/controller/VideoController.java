@@ -1,6 +1,6 @@
 package dev.pdrotmz.LBM.domain.controller;
 
-import dev.pdrotmz.LBM.domain.model.VideoModel;
+import dev.pdrotmz.LBM.domain.model.Video;
 import dev.pdrotmz.LBM.service.VideoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +27,9 @@ public class VideoController {
     private static String UPLOADED_FOLDER = "C:\\Users\\usuario\\Videos";
 
     @PostMapping("upload-video")
-    public ResponseEntity<VideoModel> registerVideo(@RequestParam("video") MultipartFile videoFile,
-                                                    @RequestParam("title") String title,
-                                                    @RequestParam("description") String description) {
+    public ResponseEntity<Video> registerVideo(@RequestParam("video") MultipartFile videoFile,
+                                               @RequestParam("title") String title,
+                                               @RequestParam("description") String description) {
         if(videoFile.isEmpty()) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -39,11 +39,11 @@ public class VideoController {
             Path path = Paths.get(UPLOADED_FOLDER + videoFile.getOriginalFilename());
             Files.write(path, bytes);
 
-            VideoModel video = new VideoModel();
+            Video video = new Video();
             video.setTitle(title);
             video.setDescription(description);
             video.setFilePath(path.toString());
-            VideoModel savedVideo = videoService.registerVideo(video);
+            Video savedVideo = videoService.registerVideo(video);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(savedVideo);
         } catch(IOException e) {
@@ -54,23 +54,23 @@ public class VideoController {
 
 
     @GetMapping
-    public ResponseEntity<List<VideoModel>> getAllVideos(){
-        List<VideoModel> videos = videoService.getAllVideos();
+    public ResponseEntity<List<Video>> getAllVideos(){
+        List<Video> videos = videoService.getAllVideos();
         return ResponseEntity.ok(videos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VideoModel> getVideoById(@PathVariable UUID id) {
-        Optional<VideoModel> video = videoService.getVideoById(id);
+    public ResponseEntity<Video> getVideoById(@PathVariable UUID id) {
+        Optional<Video> video = videoService.getVideoById(id);
         return video.map(ResponseEntity::ok).orElseGet(()
                 -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VideoModel> updateVideo(@PathVariable UUID id,
-                                                  @RequestBody VideoModel video) {
+    public ResponseEntity<Video> updateVideo(@PathVariable UUID id,
+                                             @RequestBody Video video) {
         try {
-            VideoModel updateVideo = videoService.updateVideo(id, video);
+            Video updateVideo = videoService.updateVideo(id, video);
             return ResponseEntity.ok(updateVideo);
 
         } catch(EntityNotFoundException e) {

@@ -9,17 +9,14 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_video_aulas")
+@Table(name = "tb_teachers")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class VideoModel {
+public class Teacher extends BaseUser{
 
-    @Id
-    @GeneratedValue(strategy =  GenerationType.UUID)
-    private UUID IdVideo;
-    private String title;
-    private String description;
-    private String filePath;
+    private String teacherName;
+    private String teacherEmail;
+    private String teacherPassword;
 }

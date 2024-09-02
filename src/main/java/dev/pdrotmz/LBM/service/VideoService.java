@@ -1,6 +1,6 @@
 package dev.pdrotmz.LBM.service;
 
-import dev.pdrotmz.LBM.domain.model.VideoModel;
+import dev.pdrotmz.LBM.domain.model.Video;
 import dev.pdrotmz.LBM.repository.VideoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +16,24 @@ public class VideoService {
     @Autowired
     private VideoRepository videoRepository;
 
-    public VideoModel registerVideo(VideoModel video) {
+    public Video registerVideo(Video video) {
         return videoRepository.save(video);
     }
 
-    public List<VideoModel> getAllVideos() {
+    public List<Video> getAllVideos() {
         return videoRepository.findAll();
     }
 
-    public Optional<VideoModel> getVideoById(UUID idVideo) {
+    public Optional<Video> getVideoById(UUID idVideo) {
         return videoRepository.findById(idVideo);
     }
 
-    public VideoModel updateVideo(UUID idVideo, VideoModel updateVideo) {
-        return videoRepository.findById(idVideo).map(VideoModel ->{
-            VideoModel.setTitle(updateVideo.getTitle());
-            VideoModel.setDescription(updateVideo.getDescription());
-            VideoModel.setFilePath(updateVideo.getFilePath());
-            return videoRepository.save(VideoModel);
+    public Video updateVideo(UUID idVideo, Video updateVideo) {
+        return videoRepository.findById(idVideo).map(Video ->{
+            Video.setTitle(updateVideo.getTitle());
+            Video.setDescription(updateVideo.getDescription());
+            Video.setFilePath(updateVideo.getFilePath());
+            return videoRepository.save(Video);
         }).orElseThrow(() -> new EntityNotFoundException("Video was not found"));
     }
 

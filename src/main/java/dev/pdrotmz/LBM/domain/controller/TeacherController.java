@@ -1,6 +1,6 @@
 package dev.pdrotmz.LBM.domain.controller;
 
-import dev.pdrotmz.LBM.domain.model.TeacherModel;
+import dev.pdrotmz.LBM.domain.model.Teacher;
 import dev.pdrotmz.LBM.service.TeacherService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,29 +20,29 @@ public class TeacherController {
     private TeacherService teacherService;
 
     @PostMapping("/register-teacher")
-    public ResponseEntity<TeacherModel> registerTeacher(@RequestBody TeacherModel teacher) {
-        TeacherModel registeredTeacher = teacherService.registerTeacher(teacher);
+    public ResponseEntity<Teacher> registerTeacher(@RequestBody Teacher teacher) {
+        Teacher registeredTeacher = teacherService.registerTeacher(teacher);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredTeacher);
     }
 
     @GetMapping
-    public ResponseEntity<List<TeacherModel>> getAllTeachers() {
-        List<TeacherModel> teachers = teacherService.getAllTeachers();
+    public ResponseEntity<List<Teacher>> getAllTeachers() {
+        List<Teacher> teachers = teacherService.getAllTeachers();
         return ResponseEntity.ok(teachers);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TeacherModel> getTeacherById(@PathVariable UUID id) {
-        Optional<TeacherModel> teacher = teacherService.getTeacherById(id);
+    public ResponseEntity<Teacher> getTeacherById(@PathVariable UUID id) {
+        Optional<Teacher> teacher = teacherService.getTeacherById(id);
         return teacher.map(ResponseEntity::ok).orElseGet(()
                 -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TeacherModel> updateTeacher(@PathVariable UUID id,
-                                                      @RequestBody TeacherModel teacher) {
+    public ResponseEntity<Teacher> updateTeacher(@PathVariable UUID id,
+                                                 @RequestBody Teacher teacher) {
         try {
-            TeacherModel updateTeacher = teacherService.updateTeacherInfo(id, teacher);
+            Teacher updateTeacher = teacherService.updateTeacherInfo(id, teacher);
             return ResponseEntity.ok(updateTeacher);
 
         } catch (EntityNotFoundException e){

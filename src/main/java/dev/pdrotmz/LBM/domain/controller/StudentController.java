@@ -1,6 +1,6 @@
 package dev.pdrotmz.LBM.domain.controller;
 
-import dev.pdrotmz.LBM.domain.model.StudentModel;
+import dev.pdrotmz.LBM.domain.model.Student;
 import dev.pdrotmz.LBM.service.StudentService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,29 +20,29 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping("register-student")
-    public ResponseEntity<StudentModel> registerStudent(@RequestBody StudentModel student) {
-        StudentModel registeredStudent = studentService.registerStudent(student);
+    public ResponseEntity<Student> registerStudent(@RequestBody Student student) {
+        Student registeredStudent = studentService.registerStudent(student);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredStudent);
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentModel>> getAllStudent(){
-        List<StudentModel> students = studentService.getAllStudent();
+    public ResponseEntity<List<Student>> getAllStudent(){
+        List<Student> students = studentService.getAllStudent();
         return ResponseEntity.ok(students);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentModel> getStudentById(@PathVariable UUID id) {
-        Optional<StudentModel> student = studentService.getStudentById(id);
+    public ResponseEntity<Student> getStudentById(@PathVariable UUID id) {
+        Optional<Student> student = studentService.getStudentById(id);
         return student.map(ResponseEntity::ok).orElseGet(()
                 ->ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudentModel> updateStudent(@PathVariable UUID id,
-                                                                @RequestBody StudentModel student) {
+    public ResponseEntity<Student> updateStudent(@PathVariable UUID id,
+                                                 @RequestBody Student student) {
         try {
-            StudentModel updateStudent = studentService.updateStudent(id, student);
+            Student updateStudent = studentService.updateStudent(id, student);
             return ResponseEntity.ok().body(updateStudent);
         } catch(EntityNotFoundException e) {
             return ResponseEntity.notFound().build();

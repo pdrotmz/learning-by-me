@@ -1,6 +1,6 @@
 package dev.pdrotmz.LBM.service;
 
-import dev.pdrotmz.LBM.domain.model.TeacherModel;
+import dev.pdrotmz.LBM.domain.model.Teacher;
 import dev.pdrotmz.LBM.repository.TeacherRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,27 +17,27 @@ public class TeacherService {
     private TeacherRepository teacherRepository;
 
     // Teacher register function
-    public TeacherModel registerTeacher(TeacherModel teacherModel) {
-        return teacherRepository.save(teacherModel);
+    public Teacher registerTeacher(Teacher teacher) {
+        return teacherRepository.save(teacher);
     }
 
     // List Teacher function
-    public List<TeacherModel> getAllTeachers() {
+    public List<Teacher> getAllTeachers() {
         return teacherRepository.findAll();
     }
 
     // List ID Teacher function
-    public Optional<TeacherModel> getTeacherById(UUID idTeacher) {
+    public Optional<Teacher> getTeacherById(UUID idTeacher) {
         return teacherRepository.findById(idTeacher);
     }
 
     // Update Info Teacher function
-    public TeacherModel updateTeacherInfo(UUID idTeacher, TeacherModel updateTeacherInfo) {
-        return teacherRepository.findById(idTeacher).map(TeacherModel -> {
-            TeacherModel.setTeacherName(updateTeacherInfo.getTeacherName());
-            TeacherModel.setTeacherEmail(updateTeacherInfo.getTeacherEmail());
-            TeacherModel.setTeacherPassword(updateTeacherInfo.getTeacherPassword());
-            return teacherRepository.save(TeacherModel);
+    public Teacher updateTeacherInfo(UUID idTeacher, Teacher updateTeacherInfo) {
+        return teacherRepository.findById(idTeacher).map(Teacher -> {
+            Teacher.setTeacherName(updateTeacherInfo.getTeacherName());
+            Teacher.setTeacherEmail(updateTeacherInfo.getTeacherEmail());
+            Teacher.setTeacherPassword(updateTeacherInfo.getTeacherPassword());
+            return teacherRepository.save(Teacher);
         }).orElseThrow(() -> new EntityNotFoundException("Teacher was not found"));
     }
 

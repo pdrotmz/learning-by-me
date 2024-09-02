@@ -14,11 +14,8 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentModel {
+public class Student extends BaseUser{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID idStudent;
     private String studentUsername;
     private String studentEmail;
     private String studentPassword;

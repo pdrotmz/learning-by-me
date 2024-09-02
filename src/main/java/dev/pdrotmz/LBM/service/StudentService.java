@@ -1,6 +1,6 @@
 package dev.pdrotmz.LBM.service;
 
-import dev.pdrotmz.LBM.domain.model.StudentModel;
+import dev.pdrotmz.LBM.domain.model.Student;
 import dev.pdrotmz.LBM.repository.StudentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +16,24 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    public StudentModel registerStudent(StudentModel student) {
+    public Student registerStudent(Student student) {
         return studentRepository.save(student);
     }
 
-    public List<StudentModel> getAllStudent() {
+    public List<Student> getAllStudent() {
         return studentRepository.findAll();
     }
 
-    public Optional<StudentModel> getStudentById(UUID idStudent) {
+    public Optional<Student> getStudentById(UUID idStudent) {
         return studentRepository.findById(idStudent);
     }
 
-    public StudentModel updateStudent(UUID idStudent, StudentModel updateStudentInfo) {
-        return studentRepository.findById(idStudent).map(StudentModel -> {
-            StudentModel.setStudentEmail(updateStudentInfo.getStudentEmail());
-            StudentModel.setStudentUsername(updateStudentInfo.getStudentUsername());
-            StudentModel.setStudentPassword(updateStudentInfo.getStudentPassword());
-            return studentRepository.save(StudentModel);
+    public Student updateStudent(UUID idStudent, Student updateStudentInfo) {
+        return studentRepository.findById(idStudent).map(Student -> {
+            Student.setStudentEmail(updateStudentInfo.getStudentEmail());
+            Student.setStudentUsername(updateStudentInfo.getStudentUsername());
+            Student.setStudentPassword(updateStudentInfo.getStudentPassword());
+            return studentRepository.save(Student);
         }).orElseThrow(() -> new EntityNotFoundException("Student Not Found"));
     }
 
