@@ -1,4 +1,4 @@
-package dev.pdrotmz.LBM.model;
+package dev.pdrotmz.LBM.domain.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,17 +9,17 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tb_student")
+@Table(name = "tb_teachers")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class StudentModel {
+public class TeacherModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID idStudent;
-    private String studentUsername;
-    private String studentEmail;
-    private String studentPassword;
+    private UUID idTeacher;
+    private String teacherName;
+    private String teacherEmail;
+    private String teacherPassword;
 }

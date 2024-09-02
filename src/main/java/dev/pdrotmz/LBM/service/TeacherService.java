@@ -1,6 +1,6 @@
 package dev.pdrotmz.LBM.service;
 
-import dev.pdrotmz.LBM.model.TeacherModel;
+import dev.pdrotmz.LBM.domain.model.TeacherModel;
 import dev.pdrotmz.LBM.repository.TeacherRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

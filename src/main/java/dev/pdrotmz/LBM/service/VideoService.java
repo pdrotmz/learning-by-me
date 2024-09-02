@@ -1,6 +1,6 @@
 package dev.pdrotmz.LBM.service;
 
-import dev.pdrotmz.LBM.model.VideoModel;
+import dev.pdrotmz.LBM.domain.model.VideoModel;
 import dev.pdrotmz.LBM.repository.VideoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

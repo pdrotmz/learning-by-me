@@ -1,4 +1,4 @@
-package dev.pdrotmz.LBM.model;
+package dev.pdrotmz.LBM.domain.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
