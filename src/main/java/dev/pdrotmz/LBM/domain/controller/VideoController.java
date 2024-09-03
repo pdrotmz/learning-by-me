@@ -24,7 +24,7 @@ public class VideoController {
     @Autowired
     private VideoService videoService;
 
-    private static String UPLOADED_FOLDER = "C:\\Users\\usuario\\Videos";
+    private static String UPLOADED_FOLDER = "C:\\Vídeos";
 
     @PostMapping("upload-video")
     public ResponseEntity<Video> registerVideo(@RequestParam("video") MultipartFile videoFile,

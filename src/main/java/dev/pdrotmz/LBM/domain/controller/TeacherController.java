@@ -34,30 +34,19 @@ public class TeacherController {
     @GetMapping("/{id}")
     public ResponseEntity<Teacher> getTeacherById(@PathVariable UUID id) {
         Optional<Teacher> teacher = teacherService.getTeacherById(id);
-        return teacher.map(ResponseEntity::ok).orElseGet(()
-                -> ResponseEntity.notFound().build());
+        return teacher.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Teacher> updateTeacher(@PathVariable UUID id,
-                                                 @RequestBody Teacher teacher) {
-        try {
-            Teacher updateTeacher = teacherService.updateTeacherInfo(id, teacher);
-            return ResponseEntity.ok(updateTeacher);
-
-        } catch (EntityNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Teacher> updateTeacher(@PathVariable UUID id, @RequestBody Teacher teacher) {
+        Teacher updateTeacher = teacherService.updateTeacherInfo(id, teacher);
+        return ResponseEntity.ok(updateTeacher);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTeacher(@PathVariable UUID id) {
-        try {
-            teacherService.deleteTeacher(id);
-            return ResponseEntity.noContent().build();
-
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        teacherService.deleteTeacher(id);
+        return ResponseEntity.noContent().build();
     }
 }
+

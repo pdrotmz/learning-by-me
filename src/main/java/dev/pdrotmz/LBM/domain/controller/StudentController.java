@@ -26,7 +26,7 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Student>> getAllStudent(){
+    public ResponseEntity<List<Student>> getAllStudent() {
         List<Student> students = studentService.getAllStudent();
         return ResponseEntity.ok(students);
     }
@@ -34,28 +34,18 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable UUID id) {
         Optional<Student> student = studentService.getStudentById(id);
-        return student.map(ResponseEntity::ok).orElseGet(()
-                ->ResponseEntity.notFound().build());
+        return student.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable UUID id,
-                                                 @RequestBody Student student) {
-        try {
-            Student updateStudent = studentService.updateStudent(id, student);
-            return ResponseEntity.ok().body(updateStudent);
-        } catch(EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Student> updateStudent(@PathVariable UUID id, @RequestBody Student student) {
+        Student updateStudent = studentService.updateStudent(id, student);
+        return ResponseEntity.ok().body(updateStudent);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStudent(@PathVariable UUID id){
-        try {
-            studentService.deleteStudent(id);
-            return ResponseEntity.noContent().build();
-        } catch(EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> deleteStudent(@PathVariable UUID id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.noContent().build();
     }
 }
