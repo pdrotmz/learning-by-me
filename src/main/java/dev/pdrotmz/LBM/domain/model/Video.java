@@ -1,5 +1,6 @@
 package dev.pdrotmz.LBM.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,4 +23,10 @@ public class Video {
     private String title;
     private String description;
     private String filePath;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", referencedColumnName = "id")
+    @JsonBackReference
+    private Teacher teacher;
+
 }
