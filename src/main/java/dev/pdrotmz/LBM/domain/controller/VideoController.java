@@ -4,6 +4,7 @@ import dev.pdrotmz.LBM.domain.model.Video;
 import dev.pdrotmz.LBM.service.VideoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,9 @@ public class VideoController {
     @Autowired
     private VideoService videoService;
 
-    private static String UPLOADED_FOLDER = "C:\\Users\\usuario\\Videos";
+    @Value("${video.upload.dir}")
+    private String uploadedFolder;
+
 
     @PostMapping("upload-video")
     public ResponseEntity<Video> registerVideo(@RequestParam("video") MultipartFile videoFile,
@@ -36,7 +39,7 @@ public class VideoController {
 
         try {
             byte[] bytes = videoFile.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER + videoFile.getOriginalFilename());
+            Path path = Paths.get(uploadedFolder + videoFile.getOriginalFilename());
             Files.write(path, bytes);
 
             Video video = new Video();
