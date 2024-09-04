@@ -2,7 +2,6 @@ package dev.pdrotmz.LBM.domain.controller;
 
 import dev.pdrotmz.LBM.domain.model.Teacher;
 import dev.pdrotmz.LBM.service.TeacherService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,4 +48,3 @@ public class TeacherController {
         return ResponseEntity.noContent().build();
     }
 }
-

@@ -25,4 +25,3 @@ public class Teacher extends BaseUser {
     @JsonManagedReference
     private List<Video> videos;
 }
-

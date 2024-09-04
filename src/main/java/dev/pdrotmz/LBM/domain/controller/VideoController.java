@@ -1,6 +1,8 @@
 package dev.pdrotmz.LBM.domain.controller;
 
+import dev.pdrotmz.LBM.domain.model.Teacher;
 import dev.pdrotmz.LBM.domain.model.Video;
+import dev.pdrotmz.LBM.repository.TeacherRepository;
 import dev.pdrotmz.LBM.service.VideoService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,26 +25,36 @@ public class VideoController {
 
     @Autowired
     private VideoService videoService;
-
-    private static String UPLOADED_FOLDER = "C:\\Vídeos";
+    @Autowired
+    private TeacherRepository teacherRepository;
 
     @PostMapping("upload-video")
     public ResponseEntity<Video> registerVideo(@RequestParam("video") MultipartFile videoFile,
                                                @RequestParam("title") String title,
-                                               @RequestParam("description") String description) {
-        if(videoFile.isEmpty()) {
+                                               @RequestParam("description") String description,
+                                               @RequestParam("teacherid") UUID teacherId) {
+        if (videoFile.isEmpty()) {
             return ResponseEntity.badRequest().body(null);
         }
 
         try {
             byte[] bytes = videoFile.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER + videoFile.getOriginalFilename());
-            Files.write(path, bytes);
+            Path tempFile = Files.createTempFile(null, videoFile.getOriginalFilename());
+            Files.write(tempFile, bytes);
 
+            // Busque o Teacher pelo ID
+            Optional<Teacher> teacherOptional = teacherRepository.findById(teacherId);
+            if (teacherOptional.isEmpty()) {
+                return ResponseEntity.badRequest().body(null);  // Teacher não encontrado
+            }
+            Teacher teacher = teacherOptional.get();
+
+            // Crie o objeto Video e associe o Teacher
             Video video = new Video();
             video.setTitle(title);
             video.setDescription(description);
-            video.setFilePath(path.toString());
+            video.setFilePath(tempFile.toString());
+            video.setTeacher(teacher);  // Associe o teacher ao vídeo
             Video savedVideo = videoService.registerVideo(video);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(savedVideo);
