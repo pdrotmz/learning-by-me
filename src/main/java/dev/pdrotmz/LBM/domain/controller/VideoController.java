@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("video-area")
+@RequestMapping("private/video-area")
 public class VideoController {
 
     @Autowired
