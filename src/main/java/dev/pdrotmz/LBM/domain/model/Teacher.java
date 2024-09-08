@@ -2,6 +2,7 @@ package dev.pdrotmz.LBM.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +18,11 @@ import java.util.List;
 @NoArgsConstructor
 public class Teacher extends BaseUser {
 
+    @NotBlank
     private String teacherName;
+    @NotBlank
     private String teacherEmail;
+    @NotBlank
     private String teacherPassword;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "teacher")
