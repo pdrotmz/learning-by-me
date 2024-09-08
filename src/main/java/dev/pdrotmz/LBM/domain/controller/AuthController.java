@@ -1,7 +1,7 @@
 package dev.pdrotmz.LBM.domain.controller;
 
-import dev.pdrotmz.LBM.domain.dto.LoginRequestDTO;
-import dev.pdrotmz.LBM.domain.dto.RegisterRequestDTO;
+import dev.pdrotmz.LBM.domain.dto.LoginTeacherRequestDTO;
+import dev.pdrotmz.LBM.domain.dto.RegisterTeacherRequestDTO;
 import dev.pdrotmz.LBM.domain.dto.ResponseDTO;
 import dev.pdrotmz.LBM.domain.model.Teacher;
 import dev.pdrotmz.LBM.infra.security.TokenService;
@@ -26,17 +26,19 @@ public class AuthController {
     private final TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDTO loginRequestDTO) {
-        Teacher teacher = this.teacherRepository.findByTeacherEmail(loginRequestDTO.email()).orElseThrow(() -> new RuntimeException("User Not Found"));
+    public ResponseEntity<ResponseDTO> login(@RequestBody LoginTeacherRequestDTO loginRequestDTO) {
+        Teacher teacher = this.teacherRepository.findByTeacherEmail(loginRequestDTO.email()).
+                orElseThrow(() -> new RuntimeException("User Not Found"));
         if(passwordEncoder.matches(loginRequestDTO.password(), teacher.getTeacherPassword())) {
             String token = this.tokenService.generateToken(teacher);
-            return ResponseEntity.ok(new ResponseDTO(teacher.getName(), token));
+            String redirectURL = "/teacher-area/" + teacher.getId();
+            return ResponseEntity.ok(new ResponseDTO(teacher.getName(), token, redirectURL));
         }
         return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody RegisterRequestDTO registerRequestDTO) {
+    public ResponseEntity register(@RequestBody RegisterTeacherRequestDTO registerRequestDTO) {
         Optional<Teacher> teacher = this.teacherRepository.findByTeacherEmail(registerRequestDTO.email());
 
         if(teacher.isEmpty()) {
@@ -47,7 +49,8 @@ public class AuthController {
             this.teacherRepository.save(newTeacher);
 
             String token = this.tokenService.generateToken(newTeacher);
-            return ResponseEntity.ok(new ResponseDTO(newTeacher.getTeacherName(), token));
+            String redirectUrl = "/teacher-area" + newTeacher.getId();
+            return ResponseEntity.ok(new ResponseDTO(newTeacher.getTeacherName(), token, redirectUrl));
         }
         return ResponseEntity.badRequest().build();
     }
