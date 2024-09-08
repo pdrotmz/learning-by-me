@@ -1,4 +1,6 @@
 package dev.pdrotmz.LBM.domain.dto;
 
-public record RegisterTeacherRequestDTO(String name, String email, String password) {
+import jakarta.validation.constraints.NotBlank;
+
+public record RegisterTeacherRequestDTO(@NotBlank String name, @NotBlank String email, @NotBlank String password) {
 }
