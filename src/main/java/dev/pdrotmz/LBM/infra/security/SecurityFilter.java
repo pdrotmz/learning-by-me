@@ -1,6 +1,8 @@
 package dev.pdrotmz.LBM.infra.security;
 
+import dev.pdrotmz.LBM.domain.model.Student;
 import dev.pdrotmz.LBM.domain.model.Teacher;
+import dev.pdrotmz.LBM.repository.StudentRepository;
 import dev.pdrotmz.LBM.repository.TeacherRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,6 +26,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     TeacherRepository teacherRepository;
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -34,6 +38,12 @@ public class SecurityFilter extends OncePerRequestFilter {
             Teacher teacher = teacherRepository.findByTeacherEmail(login).orElseThrow(() -> new RuntimeException("User not found"));
             var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_TEACHER"));
             var authentication = new UsernamePasswordAuthenticationToken(teacher, null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else if(request.getRequestURI().startsWith("/student-area")) {
+            Student student = studentRepository.findByStudentEmail(login)
+                    .orElseThrow(() -> new RuntimeException("Student Not Found"));
+            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_STUDENT"));
+            var authentication = new UsernamePasswordAuthenticationToken(student, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);

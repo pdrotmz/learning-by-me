@@ -2,10 +2,10 @@ package dev.pdrotmz.LBM.domain.controller;
 
 import dev.pdrotmz.LBM.domain.model.Student;
 import dev.pdrotmz.LBM.service.StudentService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +32,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<Student> getStudentById(@PathVariable UUID id) {
         Optional<Student> student = studentService.getStudentById(id);
         return student.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
