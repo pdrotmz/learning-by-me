@@ -32,7 +32,7 @@ public class AuthTeacherController {
         if(passwordEncoder.matches(loginRequestDTO.password(), teacher.getTeacherPassword())) {
             String token = this.tokenService.generateTokenForTeacher(teacher);
             String redirectURL = "/teacher-area/" + teacher.getId();
-            return ResponseEntity.ok(new ResponseTeacherDTO(teacher.getName(), token, redirectURL));
+            return ResponseEntity.ok(new ResponseTeacherDTO(teacher.getTeacherName(), token, redirectURL));
         }
         return ResponseEntity.badRequest().build();
     }
