@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("teacher-area")
+@CrossOrigin(origins = "https://lbm-frontend.vercel.app/")
 public class TeacherController {
 
     @Autowired
