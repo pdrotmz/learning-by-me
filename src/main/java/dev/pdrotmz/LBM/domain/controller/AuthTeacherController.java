@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/auth-teacher")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://lbm-frontend.vercel.app/")
 public class AuthTeacherController {
 
     private final TeacherRepository teacherRepository;
