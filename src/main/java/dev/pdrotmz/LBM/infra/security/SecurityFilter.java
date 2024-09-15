@@ -34,20 +34,23 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         var login = tokenService.validateToken(token);
 
-        if(login!=null) {
-            Teacher teacher = teacherRepository.findByTeacherEmail(login).orElseThrow(() -> new RuntimeException("User not found"));
-            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_TEACHER"));
-            var authentication = new UsernamePasswordAuthenticationToken(teacher, null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } else if(request.getRequestURI().startsWith("/student-area")) {
-            Student student = studentRepository.findByStudentEmail(login)
-                    .orElseThrow(() -> new RuntimeException("Student Not Found"));
-            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_STUDENT"));
-            var authentication = new UsernamePasswordAuthenticationToken(student, null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (login != null) {
+            if (request.getRequestURI().startsWith("/private/video-area")) {
+                Teacher teacher = teacherRepository.findByTeacherEmail(login).orElseThrow(() -> new RuntimeException("User not found"));
+                var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_TEACHER"));
+                var authentication = new UsernamePasswordAuthenticationToken(teacher, null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else if (request.getRequestURI().startsWith("/student-area")) {
+                Student student = studentRepository.findByStudentEmail(login)
+                        .orElseThrow(() -> new RuntimeException("Student Not Found"));
+                var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_STUDENT"));
+                var authentication = new UsernamePasswordAuthenticationToken(student, null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
         filterChain.doFilter(request, response);
     }
+
 
     public String recoverToken(HttpServletRequest request) {
         var authHeader = request.getHeader("Authorization");

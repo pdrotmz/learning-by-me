@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,8 +32,7 @@ public class VideoController {
     @PostMapping("upload-video")
     public ResponseEntity<Video> registerVideo(@RequestParam("video") MultipartFile videoFile,
                                                @RequestParam("title") String title,
-                                               @RequestParam("description") String description,
-                                               @RequestParam("teacherid") UUID teacherId) {
+                                               @RequestParam("description") String description) {
         if (videoFile.isEmpty()) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -42,19 +42,16 @@ public class VideoController {
             Path tempFile = Files.createTempFile(null, videoFile.getOriginalFilename());
             Files.write(tempFile, bytes);
 
-            // Busque o Teacher pelo ID
-            Optional<Teacher> teacherOptional = teacherRepository.findById(teacherId);
-            if (teacherOptional.isEmpty()) {
-                return ResponseEntity.badRequest().body(null);  // Teacher não encontrado
-            }
-            Teacher teacher = teacherOptional.get();
+            // Obtém o professor autenticado
+            Teacher authenticatedTeacher = (Teacher) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            // Crie o objeto Video e associe o Teacher
+            // Crie o objeto Video e associe o professor autenticado
             Video video = new Video();
             video.setTitle(title);
             video.setDescription(description);
             video.setFilePath(tempFile.toString());
-            video.setTeacher(teacher);  // Associe o teacher ao vídeo
+            video.setTeacher(authenticatedTeacher);  // Associa o teacher autenticado ao vídeo
+
             Video savedVideo = videoService.registerVideo(video);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(savedVideo);
@@ -63,6 +60,7 @@ public class VideoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
 
     @GetMapping

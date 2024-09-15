@@ -20,12 +20,14 @@ public class Teacher extends BaseUser {
 
     @NotBlank
     private String teacherName;
+
     @NotBlank
     private String teacherEmail;
+
     @NotBlank
     private String teacherPassword;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "teacher")
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Video> videos;
 }

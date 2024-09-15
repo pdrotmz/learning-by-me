@@ -19,18 +19,20 @@ import java.util.UUID;
 public class Video {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.UUID)
-    private UUID IdVideo;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID idVideo;
+
     @NotBlank
     private String title;
+
     @NotBlank
     private String description;
+
     @NotBlank
     private String filePath;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", referencedColumnName = "id")
     @JsonBackReference
     private Teacher teacher;
-
 }
