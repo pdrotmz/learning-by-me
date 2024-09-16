@@ -22,6 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("private/video-area")
+@CrossOrigin(origins = "https://lbm-frontend.vercel.app/")
 public class VideoController {
 
     @Autowired
