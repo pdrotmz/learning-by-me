@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth-student/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/teacher-area/**").hasRole("TEACHER")
                         .requestMatchers(HttpMethod.GET, "/student-area/**").hasRole("STUDENT")
+                        .requestMatchers(HttpMethod.POST, "/private/video-area/upload-video").hasRole("TEACHER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
